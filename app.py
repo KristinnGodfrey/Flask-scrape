@@ -4,6 +4,9 @@ import requests
 from bs4 import BeautifulSoup
 app = Flask(__name__)
 
+class Prod:
+    def __init__(self, name):  
+        self.name = name  
 
 
 
@@ -13,20 +16,20 @@ def hello():
     page = requests.get('https://svens.is/collections/frontpage')
     soup = BeautifulSoup(page.content, 'html.parser')
 
-
-    products = ""
+    myList = []
+    # products = ""
     productItem = soup.find_all("div", {"class": "product-card"})
     for tag in productItem:
         tdTags = tag.find_all("a", {"class": "grid-view-item__link"})
         for t in tdTags:
             x = t.find_all("span", {"class": "visually-hidden"})
             for s in x:
-                products += s.text
+                myList.append( Prod(s.text))
 
-    print(products)
-        
+    for obj in myList:
+        print(obj.name) 
 
-    return products
+    return ""
 
 if __name__ == '__main__':
     app.run()
