@@ -13,27 +13,20 @@ def hello():
     page = requests.get('https://svens.is/collections/frontpage')
     soup = BeautifulSoup(page.content, 'html.parser')
 
-    # Extract title of page
-    # all_product_card_tags = []
-    # for element in soup.select('product-card'):
-    #     print(element)
-    #     all_product_card_tags.append(element.text)
-    # all_product_card_tags = []
-    # for element in soup.select('div'):
-    # all_product_card_tags.append(soup.find_all("div", class_=["grid-view-item","product-card","visually-hidden"]))
-    # all_product_card_tags.append(soup.select("div.grid-view-item.product-card"))
-    all_product_card_tags = soup.find_all("div", {"class": "product-view"})
-    print(all_product_card_tags)
-    # for e in all_product_card_tags:
-    #     eTags = e.find_all("a", {"class": "grid-view-item__link"})
-    #     print(eTags.text)
-    #     for x in e:
-    #         print(x.text)
-    # print(all_product_card_tags)
+
+    products = ""
+    productItem = soup.find_all("div", {"class": "product-card"})
+    for tag in productItem:
+        tdTags = tag.find_all("a", {"class": "grid-view-item__link"})
+        for t in tdTags:
+            x = t.find_all("span", {"class": "visually-hidden"})
+            for s in x:
+                products += s.text
+
+    print(products)
         
-    # print the result    
-    # print(all_product_card_tags)
-    return ""
+
+    return products
 
 if __name__ == '__main__':
     app.run()
