@@ -1,17 +1,18 @@
 from flask import Flask
 from flask import jsonify
+from flask import render_template
 import requests
 from bs4 import BeautifulSoup
 app = Flask(__name__)
 
-class Prod:
+class Prod(object):
     def __init__(self, name, vendor, price):  
         self.name = name  
         self.vendor = vendor
         self.price = price
 
 @app.route('/')
-def hello():
+def index():
     # Make a request to https://codedamn-classrooms.github.io/webscraper-python-codedamn-classroom-website/
     end_page_num = 3
     i = 1
@@ -34,15 +35,25 @@ def hello():
         for productContainer in soup.find_all("div",{"class": "grid-view-item product-card"}):
 
             productItem = productContainer.find("div", {"class": "h4 grid-view-item__title product-card__title"})
-            print(productItem.get_text(strip=True, separator='\n'))
+            productItem = productItem.get_text(strip=True, separator='\n')
+            # print(productItem)
 
             productVendor = productContainer.find("div", {"class": "price__vendor price__vendor--listing"})
-            print((productVendor.get_text(strip=True, separator='\n')))
+            productVendor = productVendor.find("dd")
+            productVendor = productVendor.get_text(strip=True, separator='\n')
+            # print(productVendor)
             
             productPrice = productContainer.find("span", {"class": "price-item price-item--regular"})
-            print(productPrice.get_text(strip=True, separator='\n'))
+            productPrice = productPrice.get_text(strip=True, separator='\n')
+            # print(productPrice)
 
-            print("\n")
+            # print("\n")
+            zeList = Prod(productItem,productVendor,productPrice)
+            myList.append(zeList)
+        
+        for obj in myList:
+            print(f"{obj.vendor}: {obj.name}\n{obj.price}")
+            print()
 
         
         
@@ -52,7 +63,7 @@ def hello():
     #     print(obj.name) 
     
 
-    return ""
+    return render_template('hello.html', myList=myList)
 
 if __name__ == '__main__':
     app.run()
