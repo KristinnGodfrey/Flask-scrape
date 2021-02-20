@@ -23,18 +23,28 @@ def index():
         
         for productContainer in soup.find_all("div", {"class": "grid-view-item product-card"}):
 
-            productItem = productContainer.find("div", {"class": "h4 grid-view-item__title product-card__title"})
-            productItem = productItem.get_text(strip=True, separator='\n')
+            productItem = productContainer.find("div", {"class": "h4 grid-view-item__title product-card__title"}).get_text(strip=True, separator='\n')
+            productVendor = productContainer.find("div", {"class": "price__vendor price__vendor--listing"}).find("dd").get_text(strip=True, separator='\n')
+            productPrice = productContainer.find("span", {"class": "price-item price-item--regular"}).get_text(strip=True, separator='\n')
 
-            productVendor = productContainer.find("div", {"class": "price__vendor price__vendor--listing"})
-            productVendor = productVendor.find("dd")
-            productVendor = productVendor.get_text(strip=True, separator='\n')
+            myList.append(Prod(productItem, productVendor, productPrice))    
+    
+    # myList.sort(key=lambda x: x.vendor, reverse=False)
 
-            productPrice = productContainer.find("span", {"class": "price-item price-item--regular"})
-            productPrice = productPrice.get_text(strip=True, separator='\n')
+    pages = ['loop', 'lyft', 'paz', 'shiro', 'skruf', 'white-fox']
+    snusari = []
+    for p in pages:        
+        page = requests.get('https://snusari.is/products/{}'.format(p))        
+        
+        soup = BeautifulSoup(page.content, 'html.parser')
 
-            myList.append(Prod(productItem, productVendor, productPrice))
-            
+        for productContainer in soup.find_all("span", {"gf_swatch"}):
+            productItem = productContainer.find("span").get_text(strip=True, separator='\n')
+            productVendor = p
+            productPrice = soup.find("span", {"gf_product-price money"}).get_text(strip=True, separator='\n')
+            print(productVendor, productItem, productPrice)
+        
+
     return render_template('hello.html', svens=myList)
 
 
