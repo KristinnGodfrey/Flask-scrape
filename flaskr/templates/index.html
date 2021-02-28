@@ -13,14 +13,14 @@
     <thead>
       <tr>
         <th> <h1>Lyft</h1> </th>
-        <th> <h1>Svens</h1> </th>
+        <th> </th>
       </tr>
     </thead>
     <tbody>
       {% for obj in lyft %}
       <tr>
         <td> {{ "{}: {} {}".format(obj.vendor,obj.name,obj.price) }} </td>
-        <td> <a href="{{ '{}/{}'.format(obj.vendor,obj.name.replace(' ', '-')) }}">come at me bro</a>
+        <td> <a href="{{ '{}/{}'.format(obj.vendor,obj.name.replace(' ', '-')) }}">Svens</a>
       </tr> 
       {% endfor %}
     </tbody>

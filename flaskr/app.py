@@ -19,8 +19,8 @@ def productNameAssert(productName, storeArray):
     if productName in storeArray:
         return True
 
-@app.route('/<productName>')
-def yolo(brand, id):    
+@app.route('/<brandName>/<productName>')
+def yolo(brandName, productName):
     return redirect('/')
 
 
@@ -38,8 +38,6 @@ def index():
             productPrice = productContainer.find("span", {"class": "price-item price-item--regular"}).get_text(strip=True, separator='\n')
 
             svens.append(Store(productItem, productVendor, productPrice))    
-    
-    # myList.sort(key=lambda x: x.vendor, reverse=False)
 
     pages = ['loop', 'lyft', 'paz', 'shiro', 'skruf', 'white-fox']
     snusari = []
@@ -67,7 +65,6 @@ def index():
     lyft = []
 
     for productContainer in soup.find_all("div", {"product details product-item-details"}):
-        # print(productContainer)
         productItem = productContainer.find("a", {"product-item-link"}).get_text(strip=True, separator='\n')
         productVendor = "Lyft"
         lyft.append(Brand(productItem, productVendor))
@@ -78,10 +75,7 @@ def index():
 
     # for productContainer in soup.find_all("li", {"product  has-label getted-image filled"}):
 
-    return render_template('hello.html', svens=svens, snusari=snusari, loop=loop, lyft=lyft)
-
-
-
+    return render_template('index.html', svens=svens, snusari=snusari, loop=loop, lyft=lyft)
 
 if __name__ == '__main__':
     app.run(debug = True)
