@@ -20,7 +20,7 @@ def productNameAssert(productName, storeArray):
         return True
 
 @app.route('/<brandName>/<productName>')
-def yolo(brandName, productName):
+def stringMatch(brandName, productName):
     return redirect('/')
 
 
