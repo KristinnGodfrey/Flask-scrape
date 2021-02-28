@@ -4,29 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <title>Hello World! Site Title</title>
   </head>
   <body>
-  <h1> Loop </h1>
-    {% for obj in loop %}
-      {{ "{}: {} {}".format(obj.vendor,obj.name,obj.price) }}
-      <br>
-    {% endfor %}
-  <h1> Lyft </h1>
-    {% for obj in lyft %}
-      {{ "{}: {} {}".format(obj.vendor,obj.name,obj.price) }}
-      <br>
-    {% endfor %}
-    <h1> Svens</h1>
-    {% for obj in svens %}
-      {{ "{}: {} {}".format(obj.vendor,obj.name,obj.price) }}
-      <br>
-    {% endfor %}
-    <h1> Snusari </h1>
-    {% for obj in snusari %}
-      {{ "{}: {} {}".format(obj.vendor,obj.name,obj.price) }}
-      <br>
-    {% endfor %}
-    
+
+  <table>
+    <thead>
+      <tr>
+        <th> <h1>Lyft</h1> </th>
+        <th> <h1>Svens</h1> </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for obj in lyft %}
+      <tr>
+        <td> {{ "{}: {} {}".format(obj.vendor,obj.name,obj.price) }} </td>
+        <td> <a href="{{ '{}/{}'.format(obj.vendor,obj.name.replace(' ', '-')) }}">come at me bro</a>
+      </tr> 
+      {% endfor %}
+    </tbody>
+    </thead>
+
+  {# <table>
+    <thead>
+      <tr>
+        <th>
+          <h1>Loop</h1>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for obj in loop %}
+      <tr>
+        <td>
+          {{ "{}: {} {}".format(obj.vendor,obj.name,obj.price) }}
+        </td>
+      </tr> 
+      {% endfor %}
+    </tbody>
+    </thead> #}
+  <table>    
   </body>
 </html>

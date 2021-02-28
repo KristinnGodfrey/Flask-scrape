@@ -1,19 +1,27 @@
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, redirect, url_for
 import requests
 from bs4 import BeautifulSoup
 app = Flask(__name__)
 
 
-class Prod(object):
+class Store(object):
     def __init__(self, name, vendor, price):
         self.name = name
         self.vendor = vendor
         self.price = price
 
-class Officials(object):
+class Brand(object):
     def __init__(self, name, vendor):
         self.name = name
         self.vendor = vendor
+
+def productNameAssert(productName, storeArray):
+    if productName in storeArray:
+        return True
+
+@app.route('/<productName>')
+def yolo(brand, id):    
+    return redirect('/')
 
 
 @app.route('/')
@@ -29,7 +37,7 @@ def index():
             productVendor = productContainer.find("div", {"class": "price__vendor price__vendor--listing"}).find("dd").get_text(strip=True, separator='\n')
             productPrice = productContainer.find("span", {"class": "price-item price-item--regular"}).get_text(strip=True, separator='\n')
 
-            svens.append(Prod(productItem, productVendor, productPrice))    
+            svens.append(Store(productItem, productVendor, productPrice))    
     
     # myList.sort(key=lambda x: x.vendor, reverse=False)
 
@@ -43,7 +51,7 @@ def index():
             productItem = productContainer.find("span").get_text(strip=True, separator='\n')
             productVendor = p
             productPrice = soup.find("span", {"gf_product-price money"}).get_text(strip=True, separator='\n')
-            snusari.append(Prod(productItem,productVendor,productPrice))
+            snusari.append(Store(productItem,productVendor,productPrice))
 
     page = requests.get('https://loopmania.com/#products')
     soup = BeautifulSoup(page.content, 'html.parser')
@@ -52,7 +60,7 @@ def index():
     for productContainer in soup.find_all("div", {"product-item-content"}):
         productItem = productContainer.find("h3", {"product-item-title"}).get_text(strip=True, separator='\n')
         productVendor = "Loop"
-        loop.append(Officials(productItem, productVendor))
+        loop.append(Brand(productItem, productVendor))
 
     page = requests.get('https://www.golyft.se/se/en/lyft-products')
     soup = BeautifulSoup(page.content, 'html.parser')
@@ -62,7 +70,7 @@ def index():
         # print(productContainer)
         productItem = productContainer.find("a", {"product-item-link"}).get_text(strip=True, separator='\n')
         productVendor = "Lyft"
-        lyft.append(Officials(productItem, productVendor))
+        lyft.append(Brand(productItem, productVendor))
 
     # page = requests.get('https://www.snussie.com/en/nicotine-pouches/zyn/')
     # soup = BeautifulSoup(page.content, 'html.parser')
